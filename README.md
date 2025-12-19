@@ -131,10 +131,13 @@ curl -X 'GET' 'http://localhost:8080/v2/flavors/'  -H 'accept: application/json'
 
 ##  (Units-)Test
 
+**TODO**
 OpenstackGPUService comes with a full set of units test. All external dependencies concerning 
 the Openstack API are mocked using unittest.mock functionality.
 
 ###  Mock Test Setup
+
+**TODO**
 The Mock test setup "simulates" the following setup.
 - two aggregates (for GPU and non GPU based hypervisors)
 - three hypervisors available (28 cores, 384 cores, 4 TB local disc space), two of them having 
@@ -147,6 +150,8 @@ Calling the `gpu_flavors_get` methods should return a list of three GPU flavors.
 - de.NBI 2 GPU V100 large (2 total, 1 available)
 
 ### Integration test
+
+**TODO**
 To launch the integration tests, use tox from the root directory:
 ```
 (venv)$ pip install tox
@@ -159,10 +164,10 @@ To run the server inside a Docker container, please execute the following from t
 
 ```bash
 # building the image
-docker build -t openapi_server .
+docker build -t denbi/openstackflavorexporter .
 
 # start up a container in the host network
-docker run --network host --env-file ./env.file denbi/openstackgpuservice
+docker run --env-file ./env.file denbi/app_credentials
 ```
 
 where `env.file` contains the Openstack environment :
@@ -179,8 +184,10 @@ OS_PASSWORD=XXXXXX
 ```
 
 ## Running with Docker Compose
-Run a OpenstackGPUService together with a memcached service container with docker compose is also
+Run a OpenStackFlavorExporter together with a memcached service container with docker compose is also
 supported. 
+
+
 
 ## Security considarations
 

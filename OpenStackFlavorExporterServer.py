@@ -78,7 +78,7 @@ if __name__ == '__main__':
         config = uvicorn.Config(
             app=OpenStackFlavorExporter.main.app,
             host=BIND[0], 
-            port=BIND[1],
+            port=int(BIND[1]),
             log_level="info", 
             workers=WORKERS, 
             timeout_keep_alive=TIMEOUT)

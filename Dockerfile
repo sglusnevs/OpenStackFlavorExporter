@@ -11,4 +11,4 @@ COPY . /usr/src/app
 
 EXPOSE 8080
 
-CMD ["python3","OpenStackFlavorExporter.py"]
+CMD ["python3","OpenStackFlavorExporterServer.py"]
