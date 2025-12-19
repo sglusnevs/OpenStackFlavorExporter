@@ -1,0 +1,192 @@
+[
+  {
+    "name": "de.NBI GPU T4 small",
+    "original_name": null,
+    "description": null,
+    "disk": 50,
+    "is_public": false,
+    "ram": 16384,
+    "vcpus": 8,
+    "swap": 1024,
+    "ephemeral": 0,
+    "is_disabled": false,
+    "rxtx_factor": 1.0,
+    "extra_specs": {
+      "pci_passthrough:alias": "T4:1"
+    },
+    "id": "05b03450-9927-4ee2-b02d-baf443f94dbc",
+    "location": {
+      "cloud": "envvars",
+      "region_name": "Bielefeld",
+      "zone": null,
+      "project": {
+        "id": "15c37adda6994f40bfad163a45ef680a",
+        "name": "admin_dummy",
+        "domain_id": "default",
+        "domain_name": null
+      }
+    }
+  },
+  {
+    "name": "de.NBI medium",
+    "original_name": null,
+    "description": null,
+    "disk": 50,
+    "is_public": true,
+    "ram": 32768,
+    "vcpus": 14,
+    "swap": 1024,
+    "ephemeral": 0,
+    "is_disabled": false,
+    "rxtx_factor": 1.0,
+    "extra_specs": {},
+    "id": "161dac45-ae04-4e01-8a49-b81ee8063863",
+    "location": {
+      "cloud": "envvars",
+      "region_name": "Bielefeld",
+      "zone": null,
+      "project": {
+        "id": "15c37adda6994f40bfad163a45ef680a",
+        "name": "admin_dummy",
+        "domain_id": "default",
+        "domain_name": null
+      }
+    }
+  },
+  {
+    "name": "de.NBI small",
+    "original_name": null,
+    "description": null,
+    "disk": 50,
+    "is_public": true,
+    "ram": 16384,
+    "vcpus": 8,
+    "swap": 1024,
+    "ephemeral": 0,
+    "is_disabled": false,
+    "rxtx_factor": 1.0,
+    "extra_specs": {},
+    "id": "299eeca6-ae00-44c2-99ff-eb7e3455d17f",
+    "location": {
+      "cloud": "envvars",
+      "region_name": "Bielefeld",
+      "zone": null,
+      "project": {
+        "id": "15c37adda6994f40bfad163a45ef680a",
+        "name": "admin_dummy",
+        "domain_id": "default",
+        "domain_name": null
+      }
+    }
+  },
+  {
+    "name": "de.NBI large",
+    "original_name": null,
+    "description": null,
+    "disk": 50,
+    "is_public": true,
+    "ram": 65536,
+    "vcpus": 28,
+    "swap": 1024,
+    "ephemeral": 0,
+    "is_disabled": false,
+    "rxtx_factor": 1.0,
+    "extra_specs": {},
+    "id": "33050139-1b6b-4aee-a39d-6c501fa6ae61",
+    "location": {
+      "cloud": "envvars",
+      "region_name": "Bielefeld",
+      "zone": null,
+      "project": {
+        "id": "15c37adda6994f40bfad163a45ef680a",
+        "name": "admin_dummy",
+        "domain_id": "default",
+        "domain_name": null
+      }
+    }
+  },
+  {
+    "name": "de.NBI GPU T4 medium",
+    "original_name": null,
+    "description": null,
+    "disk": 50,
+    "is_public": false,
+    "ram": 65536,
+    "vcpus": 14,
+    "swap": 1024,
+    "ephemeral": 0,
+    "is_disabled": false,
+    "rxtx_factor": 1.0,
+    "extra_specs": {
+      "pci_passthrough:alias": "T4:1"
+    },
+    "id": "3fd8303f-8962-498a-8431-6cea2bcb2a39",
+    "location": {
+      "cloud": "envvars",
+      "region_name": "Bielefeld",
+      "zone": null,
+      "project": {
+        "id": "15c37adda6994f40bfad163a45ef680a",
+        "name": "admin_dummy",
+        "domain_id": "default",
+        "domain_name": null
+      }
+    }
+  },
+  {
+    "name": "de.NBI GPU T4 large",
+    "original_name": null,
+    "description": null,
+    "disk": 50,
+    "is_public": false,
+    "ram": 131072,
+    "vcpus": 28,
+    "swap": 1024,
+    "ephemeral": 0,
+    "is_disabled": false,
+    "rxtx_factor": 1.0,
+    "extra_specs": {
+      "pci_passthrough:alias": "T4:1"
+    },
+    "id": "5f5149c4-d162-44a3-a7a3-a09de5834eac",
+    "location": {
+      "cloud": "envvars",
+      "region_name": "Bielefeld",
+      "zone": null,
+      "project": {
+        "id": "15c37adda6994f40bfad163a45ef680a",
+        "name": "admin_dummy",
+        "domain_id": "default",
+        "domain_name": null
+      }
+    }
+  },
+  {
+    "name": "de.NBI 2 GPU T4 large",
+    "original_name": null,
+    "description": null,
+    "disk": 50,
+    "is_public": false,
+    "ram": 262144,
+    "vcpus": 28,
+    "swap": 1024,
+    "ephemeral": 0,
+    "is_disabled": false,
+    "rxtx_factor": 1.0,
+    "extra_specs": {
+      "pci_passthrough:alias": "T4:2"
+    },
+    "id": "bbd6d9f9-b721-4f93-9400-225ab73a6df4",
+    "location": {
+      "cloud": "envvars",
+      "region_name": "Bielefeld",
+      "zone": null,
+      "project": {
+        "id": "15c37adda6994f40bfad163a45ef680a",
+        "name": "admin_dummy",
+        "domain_id": "default",
+        "domain_name": null
+      }
+    }
+  }
+]

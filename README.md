@@ -1,93 +1,195 @@
 # OpenStackFlavorExporter
 
+## Overview
+
+This service provides a REST-API to retrieve information about OpenStack flavors (total and available). 
+It is written for [de.NBI cloud](https://cloud.denbi.de) OpenStack setups especially in Bielefeld, 
+but can easily be adapted to any OpenStack installation providing GPU (or other) resources.
+
+The current implementation is not yet fully compatible with 
+[OpenStack Unified Resources](https://docs.openstack.org/nova/latest/admin/unified-limits.html), when  
+using _special_ resources like GPUs.
+
+_The OpenStackFlavorExporter is the successor to the 
+[OpenstackGPUService](https://github.com/deNBI/OpenstackGPUService) and, for compatibility reasons, 
+adopts its API._
+
+### Prerequisites 
+
+Without special resources (such as GPUs), the Flavor Exporter should run with any reasonably current
+OpenStack implementation (tested with OpenStack Caracal - 2024.1).
 
 
-## Getting started
+Provided that GPU-supported flavor or the specified GPUs are taken into account, it needs some
+additional configuration of aggregates and flavors to work properly.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+#### Aggregates
+GPU hypervisors have to be grouped into different aggregates based on their GPU type (`gpu_type`) 
+and on the number of GPUs they provide (`gpu_count`). Every aggregate has to make some extra 
+metadata available:
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+  - **gpu='<boolean>'** Whether this aggregate provides GPU resources.
+  - **gpu_count='<integer>'** Number of GPUs provided.
+  - **gpu_type='<string>'** Type (**alias name**) of GPU provided.
 
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
-
+##### Example
 ```
-cd existing_repo
-git remote add origin https://gitlab.ub.uni-bielefeld.de/denbi/OpenStackFlavorExporter.git
-git branch -M main
-git push -uf origin main
+$ openstack aggregate show 'Delta GPU V100'
++-------------------+--------------------------------------------------------------------------------+
+| Field             | Value                                                                          |
++-------------------+--------------------------------------------------------------------------------+
+| availability_zone | default                                                                        |
+| created_at        | 2018-10-13T19:08:59.000000                                                     |
+| deleted_at        | None                                                                           |
+| hosts             | host1,host2,...                                                                |
+| id                | 10                                                                             |
+| is_deleted        | False                                                                          |
+| name              | Delta GPU V100                                                                 |
+| properties        | cores='28', gpu='True', gpu_count='2', gpu_type='V100', hyperthreading='false' |
+| updated_at        | 2022-03-23T14:31:00.000000                                                     |
+| uuid              | xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx                                           |
++-------------------+--------------------------------------------------------------------------------+
 ```
 
-## Integrate with your tools
+#### Flavors
 
-- [ ] [Set up project integrations](https://gitlab.ub.uni-bielefeld.de/denbi/OpenStackFlavorExporter/-/settings/integrations)
+Currently GPU are supported using the 
+[PCI-passthrough feature](https://docs.openstack.org/nova/pike/admin/pci-passthrough.html)
+of Openstack. Flavors must be configured setting the _pci_passthrough:alias_ property='<alias name>:<count>. The service
+matches the **alias name** with aggregates gpu_type (aggregates metadata) to calculate the
+total count and current available number of each flavor.
 
-## Collaborate with your team
+**There is of course more configuration work to do to support GPU(PCI) devices properly.**
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+## Requirements
+Python 3.10+
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+It recommend to install dependencies in a separate virtual environment.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+```
+$ python3 -m venv venv
+$ source venv/bin/activate
+(venv)$ pip3 install -r requirements.txt
+```
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+When connecting to a "real" Openstack Setup, you have to source your
+RC file beforehand.  The Openstack user should has at  least the
+capability to list all servers, flavors, hypervisor and aggregates.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+```
+(venv)$ source my_project-openrc.sh
+``` 
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+### Server
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+For performance reasons (and better user feelings) the server returns only cached
+data. The cache (only memcached is supported) is updated continuously.
+
+![](images/openstack_gpu_service.png)
+
+1. A user/client requests for data.
+2. The server ask the cache if the requested resources are available.
+3. Depending on the cache status, the result is returned immediately or calculated (long running task!).
+4. Independent of the REST API, the cache is updated continuously (every 150 seconds by default).
+
+
+To run the server, please execute the following from the root directory:
+
+```
+(venv)$ python3 OpenStackFlavorExporterServer.py 
+```
+
+When running OpenstackGPUServer without further arguments a memcached service listening on
+127.0.0.1:11211 is expected and REST is bind to http://127.0.0.1:8080.
+
+The swagger documentation is available at:
+
+```
+http://localhost:8080/docs/
+```
+
+Your OpenAPI definition lives here:
+
+```
+http://localhost:8080/openapi.json
+```
+
+### Example API Call (using curl)
+
+#### Legacy (V1)
+
+```
+curl -X 'GET' 'http://localhost:8080/gpus/flavors/'  -H 'accept: application/json'
+```
+
+### Current Version (V2)
+```
+curl -X 'GET' 'http://localhost:8080/v2/flavors/'  -H 'accept: application/json'
+```
+
+##  (Units-)Test
+
+OpenstackGPUService comes with a full set of units test. All external dependencies concerning 
+the Openstack API are mocked using unittest.mock functionality.
+
+###  Mock Test Setup
+The Mock test setup "simulates" the following setup.
+- two aggregates (for GPU and non GPU based hypervisors)
+- three hypervisors available (28 cores, 384 cores, 4 TB local disc space), two of them having 
+  two GPUs on board
+- two instances running (de.NBI large, de.NBI GPU V100 medium)
+
+Calling the `gpu_flavors_get` methods should return a list of three GPU flavors.
+- de.NBI GPU V100 medium (4 total, 3 available)
+- de.NBI GPU V100 large (4 total, 3 available)
+- de.NBI 2 GPU V100 large (2 total, 1 available)
+
+### Integration test
+To launch the integration tests, use tox from the root directory:
+```
+(venv)$ pip install tox
+(venv)$ tox
+```
+
+## Running with Docker
+
+To run the server inside a Docker container, please execute the following from the root directory:
+
+```bash
+# building the image
+docker build -t openapi_server .
+
+# start up a container in the host network
+docker run --network host --env-file ./env.file denbi/openstackgpuservice
+```
+
+where `env.file` contains the Openstack environment :
+```
+OS_REGION_NAME=Bielefeld
+OS_PROJECT_DOMAIN_ID=default
+OS_INTERFACE=public
+OS_AUTH_URL=https://openstack.cebitec.uni-bielefeld.de:5000/v3/
+OS_USERNAME=XXXX
+OS_PROJECT_ID=XXXXX
+OS_USER_DOMAIN_NAME=Default
+OS_PROJECT_NAME=XXXXX
+OS_PASSWORD=XXXXXX
+```
+
+## Running with Docker Compose
+Run a OpenstackGPUService together with a memcached service container with docker compose is also
+supported. 
+
+
+## Security considarations
+
+The OpenStackFlavorExporter is based on FastAPI and therefore does not implement
+any authentication or authorization for protection. It is strongly recommended
+to run the OpenStackFlavorExporter behind a reverse proxy.
 
 ## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+The project is licensed under Apache License Version 2.0.
+
