@@ -182,7 +182,6 @@ OS_PASSWORD=XXXXXX
 Run a OpenstackGPUService together with a memcached service container with docker compose is also
 supported. 
 
-
 ## Security considarations
 
 The OpenStackFlavorExporter is based on FastAPI and therefore does not implement
@@ -191,5 +190,5 @@ to run the OpenStackFlavorExporter behind a reverse proxy.
 
 ## License
 
-The project is licensed under Apache License Version 2.0.
+The project is licensed under [Apache License Version 2.0](LICENCE.txt).
 
