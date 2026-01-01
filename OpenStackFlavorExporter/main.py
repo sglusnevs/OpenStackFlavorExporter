@@ -30,7 +30,7 @@ def updateCache():
          # calculate available flavors
         resources = Resources()
         resources.update()
-        flavors = resources.getExtendedFlavors()
+        flavors = resources.getFlavors()
         # and cache them using memcache (if enabled)
         MEMCACHEDCLIENT.set(MEMCACHEDPREFIX+"Flavor", flavors, MEMCACHEEXPIREAFTER)
         MEMCACHEDCLIENT.set(MEMCACHEDPREFIX+"Flavor.timestamp", timestamp.strftime('%Y-%m-%d %H:%M:%S'), MEMCACHEEXPIREAFTER)
@@ -55,7 +55,7 @@ def getFlavors() -> list[ExtendedFlavor]:
         # calculate available flavors
         resources = Resources()
         resources.update()
-        flavors = resources.getExtendedFlavors()
+        flavors = resources.getFlavors()
         # and cache them using memcache (if enabled)
         if MEMCACHE:
             MEMCACHEDCLIENT.set(MEMCACHEDPREFIX+"Flavor", flavors, MEMCACHEEXPIREAFTER)

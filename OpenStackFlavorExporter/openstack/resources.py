@@ -195,15 +195,6 @@ class Resources: # pylint: disable=too-many-instance-attributes
         """
         return self.__flavors__
 
-    def getExtendedFlavors(self):
-        """
-         Return a possible empty list of Flavor objects.
-
-        :return: List of Flavor objects
-        """
-        return self.__flavors__
-
-
     def getFlavor(self, flavorid):
         """
         Return Flavor with given id. Raise exception in case of non existing id.

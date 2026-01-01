@@ -187,8 +187,6 @@ OS_PASSWORD=XXXXXX
 Run a OpenStackFlavorExporter together with a memcached service container with docker compose is also
 supported. 
 
-
-
 ## Security considarations
 
 The OpenStackFlavorExporter is based on FastAPI and therefore does not implement
