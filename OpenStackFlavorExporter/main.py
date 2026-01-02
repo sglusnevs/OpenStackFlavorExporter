@@ -5,6 +5,9 @@ from OpenStackFlavorExporter.openstack.resources import Resources
 from pymemcache.client.base import Client as MemCachedClient
 from pymemcache import serde
 
+# disable MEMCACHE by default
+MEMCACHE = False
+
 def configure_memcache(enabled=True, host="127.0.0.1:11211", expire=300, prefix=""):
     """
     Configure memcache.
@@ -42,6 +45,7 @@ def getFlavors() -> list[ExtendedFlavor]:
     :return: List of Flavors
     :rtype: list[ExtendedFlavor]
     """
+
     flavors =  []
     timestamp = datetime.now()
 
@@ -50,7 +54,7 @@ def getFlavors() -> list[ExtendedFlavor]:
         flavors = MEMCACHEDCLIENT.get(MEMCACHEDPREFIX+'Flavor')
         if MEMCACHEDCLIENT.get(MEMCACHEDPREFIX+'Flavor.timestamp'):
             timestamp = datetime.strptime(MEMCACHEDCLIENT.get(MEMCACHEDPREFIX+'Flavor.timestamp'), '%Y-%m-%d %H:%M:%S')
-    
+
     if not flavors:
         # calculate available flavors
         resources = Resources()
