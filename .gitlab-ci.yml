@@ -1,0 +1,58 @@
+# .gitlab-ci.yml
+# -------------------------------------------------
+# 1️⃣ Define the stages (order matters)
+stages:
+  - lint
+  - test
+#  - build
+
+
+# 2️⃣ Global defaults – make the file DRY
+default:
+  image: python:3.12-slim   # official Docker image, change version as you like
+  before_script:
+    - python -V                     # sanity check
+    - pip install --upgrade pip     # keep pip fresh
+    - pip install -r requirements-dev.txt   # install your deps
+
+# -------------------------------------------------
+# 3️⃣ Linting stage
+lint:
+  stage: lint
+  script:
+    - pip install pylint
+    - pylint  OpenStackFlavorExporter            # adjust path / options
+  artifacts:
+    reports:
+      codequality: gl-code-quality-report.json   # optional: show in UI
+  tags:
+    - docker   # optional, see “Runner tags” later
+
+# -------------------------------------------------
+# 4️⃣ Testing stage
+test:
+  stage: test
+  script:
+    - pip install pytest coverage
+    - pytest --junitxml=report.xml --cov=.
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
+    paths:
+      - htmlcov/                    # coverage HTML (optional)
+  tags:
+    - docker
+
+# -------------------------------------------------
+# 5️⃣ Build stage (e.g., build a wheel or Docker image)
+build:
+  stage: build
+  script:
+    - pip install build
+    - python -m build               # produces .whl and .tar.gz in dist/
+  artifacts:
+    paths:
+      - dist/
+  tags:
+    - docker

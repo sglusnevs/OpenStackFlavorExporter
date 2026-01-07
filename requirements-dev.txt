@@ -4,3 +4,5 @@ os_client_config
 pymemcache
 pytest
 uvicorn
+pylint
+flake8
