@@ -131,27 +131,10 @@ curl -X 'GET' 'http://localhost:8080/v2/flavors/'  -H 'accept: application/json'
 
 ##  (Units-)Test
 
-**TODO**
-OpenstackGPUService comes with a full set of units test. All external dependencies concerning 
-the Openstack API are mocked using unittest.mock functionality.
-
-###  Mock Test Setup
-
-**TODO**
-The Mock test setup "simulates" the following setup.
-- two aggregates (for GPU and non GPU based hypervisors)
-- three hypervisors available (28 cores, 384 cores, 4 TB local disc space), two of them having 
-  two GPUs on board
-- two instances running (de.NBI large, de.NBI GPU V100 medium)
-
-Calling the `gpu_flavors_get` methods should return a list of three GPU flavors.
-- de.NBI GPU V100 medium (4 total, 3 available)
-- de.NBI GPU V100 large (4 total, 3 available)
-- de.NBI 2 GPU V100 large (2 total, 1 available)
+The project comes with a full set of units test, covering the internal and REST (FastAPI) functions. All external dependencies concerning the Openstack API are mocked using unittest.mock functionality. Run pytest from project root dir to run the tests.
 
 ### Integration test
 
-**TODO**
 To launch the integration tests, use tox from the root directory:
 ```
 (venv)$ pip install tox
