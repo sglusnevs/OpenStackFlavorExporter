@@ -4,7 +4,6 @@
 stages:
   - lint
   - test
-#  - build
 
 
 # 2️⃣ Global defaults – make the file DRY
@@ -41,18 +40,5 @@ test:
       junit: report.xml
     paths:
       - htmlcov/                    # coverage HTML (optional)
-  tags:
-    - docker
-
-# -------------------------------------------------
-# 5️⃣ Build stage (e.g., build a wheel or Docker image)
-build:
-  stage: build
-  script:
-    - pip install build
-    - python -m build               # produces .whl and .tar.gz in dist/
-  artifacts:
-    paths:
-      - dist/
   tags:
     - docker
