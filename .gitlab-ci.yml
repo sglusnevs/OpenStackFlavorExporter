@@ -20,7 +20,7 @@ lint:
   stage: lint
   script:
     - pip install pylint
-    - pylint  OpenStackFlavorExporter            # adjust path / options
+    - pylint .                      # adjust path / options
   artifacts:
     reports:
       codequality: gl-code-quality-report.json   # optional: show in UI
