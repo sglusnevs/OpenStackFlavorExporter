@@ -3,6 +3,6 @@ openstacksdk
 os_client_config
 pymemcache
 pytest
+pytest-cov
 uvicorn
 pylint
-flake8
