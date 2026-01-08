@@ -23,7 +23,7 @@ dependencies = [
 ]
 
 [project.urls]
-repository = "https://github.com/deNBI/OpenStackFlavorExporter"
+repository = "https://gitlab.ub.uni-bielefeld.de/deNBI/OpenStackFlavorExporter"
 
 [build-system]
 requires = ["setuptools >= 80.0.0"]
