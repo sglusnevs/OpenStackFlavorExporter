@@ -32,8 +32,8 @@ lint:
 test:
   stage: test
   script:
-    - pip install pytest coverage
-    - pytest --junitxml=report.xml --cov=.
+    - pip install pytest pytest-coverage
+    - pytest --junitxml=report.xml --cov=OpenStackFlavorExporter tests/
   artifacts:
     when: always
     reports:
