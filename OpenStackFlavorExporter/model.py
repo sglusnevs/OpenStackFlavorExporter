@@ -4,7 +4,7 @@ class Flavor(BaseModel):
     """
         Describes the availability of a flavor with the most essential information.
     """
-    id: str  = Field(..., description= "Openstack Id") 
+    id: str  = Field(..., description= "Openstack Id")
     name: str  = Field(..., description= "human readable name of the flavor")
     available: int  = Field(..., description = "currently available flavors (positive integer)")
     total: int = Field(..., description = "total available flavors (postive integer)")
@@ -20,4 +20,3 @@ class ExtendedFlavor(Flavor):
     gpu_count: int = Field(..., description="Number of GPUs.")
     root_disk: int = Field(..., description="Root disk size in GB.")
     ephemeral_disk: int = Field(..., description="Ephemeral disk size in GB.")
-

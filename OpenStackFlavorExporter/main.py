@@ -1,9 +1,11 @@
 from datetime import datetime
 from fastapi import FastAPI, HTTPException
-from OpenStackFlavorExporter.model import Flavor, ExtendedFlavor
-from OpenStackFlavorExporter.openstack.resources import Resources
 from pymemcache.client.base import Client as MemCachedClient
 from pymemcache import serde
+
+from OpenStackFlavorExporter.model import Flavor, ExtendedFlavor
+from OpenStackFlavorExporter.openstack.resources import Resources
+
 
 # disable MEMCACHE by default
 MEMCACHE = False
@@ -17,28 +19,28 @@ def configure_memcache(enabled=True, host="127.0.0.1:11211", expire=300, prefix=
     :param prefix : optional memcached key prefix, default to ""
     :return: None
     """
-    global MEMCACHE, MEMCACHEDHOST, MEMCACHEDCLIENT, MEMCACHEEXPIREAFTER, MEMCACHEDPREFIX # pylint: disable=W0603
+    global MEMCACHE, MEMCACHEDHOST, MEMCACHEDCLIENT, MEMCACHEEXPIREAFTER, MEMCACHEDPREFIX # pylint: disable=global-variable-undefined
     MEMCACHE = enabled
     MEMCACHEDHOST = host
     MEMCACHEEXPIREAFTER = expire
     MEMCACHEDCLIENT = MemCachedClient(MEMCACHEDHOST, serde=serde.pickle_serde)
     MEMCACHEDPREFIX = prefix
 
-def updateCache():
-     """
-     Update memcache, if enabled.
-     """
-     if MEMCACHE:
+def update_cache():
+    """
+    Update memcache, if enabled.
+    """
+    if MEMCACHE:
         timestamp = datetime.now()
-         # calculate available flavors
+            # calculate available flavors
         resources = Resources()
         resources.update()
-        flavors = resources.getFlavors()
+        flavors = resources.get_flavors()
         # and cache them using memcache (if enabled)
         MEMCACHEDCLIENT.set(MEMCACHEDPREFIX+"Flavor", flavors, MEMCACHEEXPIREAFTER)
         MEMCACHEDCLIENT.set(MEMCACHEDPREFIX+"Flavor.timestamp", timestamp.strftime('%Y-%m-%d %H:%M:%S'), MEMCACHEEXPIREAFTER)
-          
-def getFlavors() -> list[ExtendedFlavor]:
+
+def _get_flavors() -> list[ExtendedFlavor]:
     """
     Get list of flavors. Use memcache to cache request if enabled.
     
@@ -59,7 +61,7 @@ def getFlavors() -> list[ExtendedFlavor]:
         # calculate available flavors
         resources = Resources()
         resources.update()
-        flavors = resources.getFlavors()
+        flavors = resources.get_flavors()
         # and cache them using memcache (if enabled)
         if MEMCACHE:
             MEMCACHEDCLIENT.set(MEMCACHEDPREFIX+"Flavor", flavors, MEMCACHEEXPIREAFTER)
@@ -84,7 +86,7 @@ async def get_gpu_flavors() -> list[Flavor]:
     :rtype: list[Flavor]
     """
     gpu_flavors = []
-    for flavor in getFlavors():
+    for flavor in _get_flavors():
         if flavor.type == "gpu":
             gpu_flavors.append(flavor)
     return gpu_flavors
@@ -98,7 +100,7 @@ async def get_gpu_flavor(item_id) -> Flavor:
     :return: GPU Flavor
     :rtype: Flavor
     """
-    for flavor in getFlavors():
+    for flavor in _get_flavors():
         if flavor.type == "gpu" and flavor.id == item_id:
             return flavor
     raise HTTPException(status_code=404, detail="Item not found")
@@ -111,7 +113,7 @@ async def get_flavors() -> list[ExtendedFlavor]:
     :return: list of flavors
     :rtype: list[ExtendedFlavor]
     """
-    return getFlavors()
+    return _get_flavors()
 
 @app.get("/v2/flavor/{item_id}")
 async def get_flavor(item_id) -> ExtendedFlavor:
@@ -122,8 +124,7 @@ async def get_flavor(item_id) -> ExtendedFlavor:
     :return: Flavor
     :rtype: ExtendedFlavor
     """
-    for flavor in getFlavors():
+    for flavor in _get_flavors():
         if flavor.id == item_id:
             return flavor
     raise HTTPException(status_code=404, detail="Item not found")
-

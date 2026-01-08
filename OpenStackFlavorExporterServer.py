@@ -1,13 +1,13 @@
 """ Commandline Server """ # pylint: disable=invalid-name,abstract-method
 import argparse
 import datetime
+import logging
 import os
 import time
-import logging
 
-import OpenStackFlavorExporter.main
 import uvicorn
 
+import OpenStackFlavorExporter.main
 
 # create simple Logger to updateCache messages to console
 LOG = logging.getLogger('updateCache')
@@ -25,7 +25,7 @@ def update_cache():
     LOG.info("Start updating cached data continuously.")
     while True:
         start = datetime.datetime.now()
-        OpenStackFlavorExporter.main.updateCache()
+        OpenStackFlavorExporter.main.update_cache()
         stop = datetime.datetime.now()
         runningtime = (stop-start).seconds
         LOG.info("Updating cached data took %d seconds.", runningtime)
@@ -77,10 +77,10 @@ if __name__ == '__main__':
         # child
         config = uvicorn.Config(
             app=OpenStackFlavorExporter.main.app,
-            host=BIND[0], 
+            host=BIND[0],
             port=int(BIND[1]),
-            log_level="info", 
-            workers=WORKERS, 
+            log_level="info",
+            workers=WORKERS,
             timeout_keep_alive=TIMEOUT)
         server = uvicorn.Server(config)
         server.run()

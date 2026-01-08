@@ -1,10 +1,9 @@
 """ Module denbi provides some helper functions to connect Openstack API. """
-import os
-
-import openstack
+from openstack import connection
 import os_client_config
 
-def create_osclient(microversions={'compute':'2.79'}): # pylint: disable=W0621
+def create_osclient(microversions={'compute':'2.79'}): # pylint: disable=dangerous-default-value
+
     """
     Create an authorized openstack.connection.Connection object, that allows
     REST API calls.
@@ -20,4 +19,4 @@ def create_osclient(microversions={'compute':'2.79'}): # pylint: disable=W0621
     for service in microversions:
         config.config[f'{service}_default_microversion']=microversions[service]
 
-    return openstack.connection.Connection(config=config)
+    return connection.Connection(config=config)

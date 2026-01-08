@@ -1,11 +1,7 @@
 """ Module contains classes  Resources and ResourcesException."""
-import OpenStackFlavorExporter.openstack
-
-from OpenStackFlavorExporter.model import ExtendedFlavor
-
 import sys
-
-
+import OpenStackFlavorExporter.openstack
+from OpenStackFlavorExporter.model import ExtendedFlavor
 
 class Resources: # pylint: disable=too-many-instance-attributes
     """
@@ -26,12 +22,12 @@ class Resources: # pylint: disable=too-many-instance-attributes
         self.cpu_overprovisioning = cpu_overprovisioning
 
 
-    def __getV(self, map,key,default=None):
+    def __getv(self, _map, _key, default=None):
         ''' Helper function that return value from map['key'] if set, default otherwise '''
-        if key in map:
-            return map[key]
+        if _key in _map:
+            return _map[_key]
         return default
-    
+
     def __update_gpu_instances_by_host__(self):
         """
         Helper method. Update map of gpu instances by host.
@@ -50,11 +46,11 @@ class Resources: # pylint: disable=too-many-instance-attributes
 
         result = {}
 
-        # create a map of hypervisor to make life a bit easier 
+        # create a map of hypervisor to make life a bit easier
         for hypervisor in self.__osclient__.list_hypervisors():
             self.__hypervisors__[hypervisor["name"].split('.')[0]] = hypervisor
 
-        
+
         for aggregate in self.__osclient__.list_aggregates():
 
             # collect all hypervisor of this aggregate
@@ -63,7 +59,7 @@ class Resources: # pylint: disable=too-many-instance-attributes
 
                 # determine number of used gpus
                 gpu_used = 0
-                
+
                 if hostname in self.__gpu_instances_by_host__:
                     for instance in self.__gpu_instances_by_host__[hostname]:
                         gpu_used = gpu_used + int(instance["flavor"]["extra_specs"]["pci_passthrough:alias"].split(":")[1])
@@ -74,9 +70,9 @@ class Resources: # pylint: disable=too-many-instance-attributes
                                         "status": hypervisor["status"],
                                         "state": hypervisor["state"],
                                         "running_vms": int(hypervisor['running_vms']),
-                                        "gpu": bool(self.__getV(aggregate["metadata"], 'gpu', False)),
-                                        "gpus": int(self.__getV(aggregate["metadata"], 'gpu_count', 0)), # type: ignore
-                                        "gpu_type": self.__getV(aggregate["metadata"], "gpu_type", 'none'),
+                                        "gpu": bool(self.__getv(aggregate["metadata"], 'gpu', False)),
+                                        "gpus": int(self.__getv(aggregate["metadata"], 'gpu_count', 0)), # type: ignore
+                                        "gpu_type": self.__getv(aggregate["metadata"], "gpu_type", 'none'),
                                         "gpus_used": int(gpu_used),
                                         "vcpus": int(hypervisor["vcpus"]),
                                         "vcpus_used": int(hypervisor["vcpus_used"]),
@@ -88,14 +84,14 @@ class Resources: # pylint: disable=too-many-instance-attributes
 
             # add necessary aggregate information to datastructure
             result[aggregate["name"]] = {}
-            result[aggregate["name"]]["gpu"] = self.__getV(aggregate["metadata"], 'gpu', False)
-            result[aggregate["name"]]["gpu_type"] = self.__getV(aggregate["metadata"], "gpu_type", 'none')
-            result[aggregate["name"]]["gpu_count"] = int(self.__getV(aggregate["metadata"], 'gpu_count', 0)) # type: ignore
+            result[aggregate["name"]]["gpu"] = self.__getv(aggregate["metadata"], 'gpu', False)
+            result[aggregate["name"]]["gpu_type"] = self.__getv(aggregate["metadata"], "gpu_type", 'none')
+            result[aggregate["name"]]["gpu_count"] = int(self.__getv(aggregate["metadata"], 'gpu_count', 0)) # type: ignore
             result[aggregate["name"]]["hypervisors"] = hypervisors
 
         self.__map_of_aggregates__ = result
 
-    def __update_flavors__(self):
+    def __update_flavors__(self): # pylint: disable=too-many-locals
         """
         Internal helper functions, that calculates available and total number of flavors.
         """
@@ -120,7 +116,7 @@ class Resources: # pylint: disable=too-many-instance-attributes
                 if "pci_passthrough:alias" in flavor["extra_specs"].keys():
                     gpu_type, gpu_count = flavor["extra_specs"]["pci_passthrough:alias"].split(":")
                     flavor_type = "gpu"
-                
+
 
                 # iterate over all aggregates
                 for aggegrate in self.__map_of_aggregates__.values():
@@ -144,21 +140,21 @@ class Resources: # pylint: disable=too-many-instance-attributes
                             # ignore t_gpu and c_gpu for non GPU flavors ...
                             t_gpu = sys.maxsize
                             c_gpu = sys.maxsize
-                            
-                        # calculate availability of total and current general resources 
+
+                        # calculate availability of total and current general resources
                         t_vcpu = int(
                             int(hypervisor["vcpus"]) * self.cpu_overprovisioning / int(flavor["vcpus"]))
                         t_mem = int(int(hypervisor["memory"]) / int(flavor["ram"]))
                         t_disk = int(int(hypervisor["disk"] / local_disk))
-                                  
+
                         c_vcpu = max(0,int((int(hypervisor["vcpus"]) * self.cpu_overprovisioning - int(
                             hypervisor["vcpus_used"])) / int(flavor["vcpus"])))
                         c_mem = max(0,int(int(hypervisor["memory_free"]) / int(flavor["ram"])))
                         c_disk = max(0,int(int(hypervisor["disk_available"] / local_disk)))
-                        
+
                         # add minimum of all resources needed to total number
                         total += min(t_gpu, t_vcpu, t_mem, t_disk)
-                        # add minimum of current available resources 
+                        # add minimum of current available resources
                         available += min(c_gpu, c_vcpu, c_mem, c_disk)
 
 
@@ -175,7 +171,7 @@ class Resources: # pylint: disable=too-many-instance-attributes
                                 gpu_count=gpu_count,
                                 root_disk=flavor["disk"],
                                 ephemeral_disk=flavor["ephemeral"]))
-                
+
             self.__flavors__ = flavors
 
     def update(self):
@@ -187,7 +183,7 @@ class Resources: # pylint: disable=too-many-instance-attributes
         self.__update_aggregates__()
         self.__update_flavors__()
 
-    def getFlavors(self):
+    def get_flavors(self):
         """
         Return a possible empty list of Flavor objects.
 
@@ -195,7 +191,7 @@ class Resources: # pylint: disable=too-many-instance-attributes
         """
         return self.__flavors__
 
-    def getFlavor(self, flavorid):
+    def get_flavor(self, flavorid):
         """
         Return Flavor with given id. Raise exception in case of non existing id.
 

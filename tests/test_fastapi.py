@@ -1,14 +1,16 @@
 import unittest
+from unittest.mock import patch
+
+from pydantic import ValidationError
 
 from fastapi.testclient import TestClient
-from pydantic import ValidationError
 from OpenStackFlavorExporter.main import app
 from OpenStackFlavorExporter.model import ExtendedFlavor, Flavor
 from tests import mock_openstack_connection
-from unittest.mock import patch
+
 
 @patch('OpenStackFlavorExporter.openstack.create_osclient')
-class Test_FastAPI(unittest.TestCase):
+class TestFastAPI(unittest.TestCase): # pylint: disable=missing-class-docstring
 
     client = TestClient(app)
 
@@ -20,7 +22,7 @@ class Test_FastAPI(unittest.TestCase):
         :param mock: mock object
         """
 
-        mock_openstack_connection(mock) 
+        mock_openstack_connection(mock)
         response = self.client.get("/gpus/flavors")
 
         assert response.status_code == 200
@@ -31,12 +33,12 @@ class Test_FastAPI(unittest.TestCase):
         # list should return 3 flavor elements
         self.assertEqual(3,len(list_of_flavors))
 
-        # iterate over all and  ... 
+        # iterate over all and  ...
         for f in list_of_flavors:
             ## ... validate against the model
             try:
                 obj = Flavor.model_validate(f)
-            
+
             except ValidationError as e:
                 self.fail(e)
 
@@ -48,8 +50,8 @@ class Test_FastAPI(unittest.TestCase):
         :param self: self
         :param mock: mock object
         """
-         
-        mock_openstack_connection(mock) 
+
+        mock_openstack_connection(mock)
         response = self.client.get("/gpus/flavor/a54ed137-04fe-463f-a2b0-666079d1b2ba")
         assert response.status_code == 200
         try:
@@ -58,7 +60,7 @@ class Test_FastAPI(unittest.TestCase):
             self.assertEqual(4,obj.total)
             self.assertEqual(3,obj.available)
         except ValidationError as e:
-                self.fail(e)
+            self.fail(e)
 
     def test_v2_flavors(self,mock):
         """
@@ -68,7 +70,7 @@ class Test_FastAPI(unittest.TestCase):
         :param mock: mock object
         """
 
-        mock_openstack_connection(mock) 
+        mock_openstack_connection(mock)
         response = self.client.get("/v2/flavors")
 
         assert response.status_code == 200
@@ -79,12 +81,12 @@ class Test_FastAPI(unittest.TestCase):
         # list should return 6 flavor elements
         self.assertEqual(6,len(list_of_flavors))
 
-        # iterate over all and  ... 
+        # iterate over all and  ...
         for f in list_of_flavors:
             ## ... validate against the model
             try:
                 obj = ExtendedFlavor.model_validate(f)
-            
+
             except ValidationError as e:
                 self.fail(e)
 
@@ -95,7 +97,7 @@ class Test_FastAPI(unittest.TestCase):
         :param self: self
         :param mock: mock object
         """
-        mock_openstack_connection(mock) 
+        mock_openstack_connection(mock)
         response = self.client.get("/v2/flavor/a54ed137-04fe-463f-a2b0-666079d1b2ba")
         assert response.status_code == 200
         try:
@@ -110,9 +112,9 @@ class Test_FastAPI(unittest.TestCase):
             self.assertEqual(1,obj.gpu_count)
             self.assertEqual(50,obj.root_disk)
             self.assertEqual(0,obj.ephemeral_disk)
-        
+
         except ValidationError as e:
-                self.fail(e)
+            self.fail(e)
 
 if __name__ == "__main__":
     unittest.main()

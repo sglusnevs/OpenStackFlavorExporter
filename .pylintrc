@@ -1,7 +1,11 @@
+[MAIN]
+
+ignore=.venv,build,.tox
+
 [MESSAGES CONTROL]
 
 # Maximum line length
-max-line-length = 120
+max-line-length = 130
 
 # Allow the code to be too long
 ignore-long-lines=True
@@ -13,7 +17,7 @@ disable=
     W0612,  # Unused variable
     R0903,  # Too few public methods in class
     R0912,  # Too many instance attributes
-    R0915, # Too many statements
+    R0915   # Too many statements
 
 
 [REPORTER]
