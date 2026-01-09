@@ -32,7 +32,7 @@ def configure_memcache(enabled=True, host="127.0.0.1:11211", expire=300, prefix=
     MEMCACHEDCLIENT = MemCachedClient(MEMCACHEDHOST, serde=serde.pickle_serde)
     MEMCACHEDPREFIX = prefix
 
-def configure(cpu_overprovisioning=4, whitelist=[], blacklist=[]):
+def configure(cpu_overprovisioning=4, whitelist=[], blacklist=[]): # pylint: disable=dangerous-default-value
     """
     Configure filters for flavors.
     
@@ -40,7 +40,7 @@ def configure(cpu_overprovisioning=4, whitelist=[], blacklist=[]):
     :param blacklist: list of flavor names to be blacklisted. A name could be regular expression.
     :return: None
     """
-    global CPU_OVERPROVISIONING, FLAVOR_WHITELIST, FLAVOR_BLACKLIST  # pylint: disable=global-variable-undefined
+    global CPU_OVERPROVISIONING, FLAVOR_WHITELIST, FLAVOR_BLACKLIST  # pylint: disable=global-statement
     CPU_OVERPROVISIONING = cpu_overprovisioning
     FLAVOR_WHITELIST = whitelist
     FLAVOR_BLACKLIST = blacklist
