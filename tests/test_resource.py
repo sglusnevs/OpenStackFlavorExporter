@@ -36,16 +36,22 @@ class TestResource(unittest.TestCase): # pylint: disable=missing-class-docstring
 
         flavors = resources.get_flavors()
 
-        # test data contains 6 flavors, so 6 entries should be returned
-        self.assertEqual(6,len(flavors))
+        # test data contains 9 flavors, so 9 entries should be returned
+        self.assertEqual(9,len(flavors))
 
         # check expected availibility for each flavor
         denbi_small = resources.get_flavor("299eeca6-ae00-44c2-99ff-eb7e3455d17f")
         self.assertEqual(30,denbi_small.available)
         self.assertEqual(42,denbi_small.total)
+        denbi_small_legacy = resources.get_flavor("799eeca6-ae00-44c2-99ff-eb7e3455d17f")
+        self.assertEqual(30,denbi_small_legacy.available)
+        self.assertEqual(42,denbi_small_legacy.total)
         denbi_medium = resources.get_flavor("161dac45-ae04-4e01-8a49-b81ee8063863")
         self.assertEqual(18,denbi_medium.available)
         self.assertEqual(24,denbi_medium.total)
+        denbi_medium_legacy = resources.get_flavor("261dac45-ae04-4e01-8a49-b81ee8063863")
+        self.assertEqual(18,denbi_medium_legacy.available)
+        self.assertEqual(24,denbi_medium_legacy.total)
         denbi_large = resources.get_flavor("33050139-1b6b-4aee-a39d-6c501fa6ae61")
         self.assertEqual(9,denbi_large.available)
         self.assertEqual(12,denbi_large.total)
@@ -58,6 +64,37 @@ class TestResource(unittest.TestCase): # pylint: disable=missing-class-docstring
         denbi_2V100_large = resources.get_flavor("9a8a5bfc-001e-469b-a787-ddbbc2ea8483") #pylint: disable=invalid-name
         self.assertEqual(1,denbi_2V100_large.available)
         self.assertEqual(2,denbi_2V100_large.total)
+        windows_standard = resources.get_flavor("234eac45-ae04-4e01-8a49-b81ee8063863")
+        self.assertEqual(12,windows_standard.available)
+        self.assertEqual(12,windows_standard.total)
+
+    def test_get_flavors_whitelist_filter(self,mock):
+        """Test get_flavors with whitelist filter."""
+    
+        mock_openstack_connection(mock)
+
+        # create new Resources object
+        resources = OpenStackFlavorExporter.openstack.resources.Resources(whitelist=["^denbi"])
+        # and update data
+        resources.update()
+
+        flavors = resources.get_flavors()
+        # test data contains 8 flavors starting with "denbi", so 8 entries should be returned
+        self.assertEqual(8,len(flavors))
+
+    def test_get_flavors_blacklist_filter(self,mock):
+        """Test get_flavors with blacklist filter."""
+
+        mock_openstack_connection(mock)
+
+        # create new Resources object
+        resources = OpenStackFlavorExporter.openstack.resources.Resources(blacklist=["legacy$","^windows"])
+        # and update data
+        resources.update()
+
+        flavors = resources.get_flavors()
+        # test data contains 7 non legacy flavors and one flavor starting with "windows", so 6 entries should be returned
+        self.assertEqual(6,len(flavors))
 
 
 if __name__ == "__main__":
