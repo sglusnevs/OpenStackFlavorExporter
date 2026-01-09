@@ -125,7 +125,7 @@ class Resources: # pylint: disable=too-many-instance-attributes
         for flavor in self.__osclient__.list_flavors(): # pylint: disable=too-many-nested-blocks
 
             # ignore all disabled filters and filter flavors using black / white listing
-            if flavor["is_disabled"] == False and self.__filter_flavor_by_name__(flavor["name"]):
+            if flavor["is_disabled"] is False and self.__filter_flavor_by_name__(flavor["name"]):
                 total = 0
                 available = 0
                 # sum up all local disk space disk and ephemeral are measured in GB, swap in MB
