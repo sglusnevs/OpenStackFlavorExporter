@@ -74,7 +74,7 @@ class TestResource(unittest.TestCase): # pylint: disable=missing-class-docstring
         mock_openstack_connection(mock)
 
         # create new Resources object
-        resources = OpenStackFlavorExporter.openstack.resources.Resources(whitelist=["^denbi"])
+        resources = OpenStackFlavorExporter.openstack.resources.Resources(whitelist=["^de.NBI"])
         # and update data
         resources.update()
 
@@ -88,7 +88,7 @@ class TestResource(unittest.TestCase): # pylint: disable=missing-class-docstring
         mock_openstack_connection(mock)
 
         # create new Resources object
-        resources = OpenStackFlavorExporter.openstack.resources.Resources(blacklist=["legacy$","^windows"])
+        resources = OpenStackFlavorExporter.openstack.resources.Resources(blacklist=[r".*LEGACY",r"Windows"])
         # and update data
         resources.update()
 
