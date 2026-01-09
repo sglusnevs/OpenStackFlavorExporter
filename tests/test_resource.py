@@ -21,8 +21,8 @@ class TestResource(unittest.TestCase): # pylint: disable=missing-class-docstring
         self.assertEqual(3, len(resources.__hypervisors__))
         # test data contains 2 aggregate at all
         self.assertEqual(2, len(resources.__map_of_aggregates__))
-        # test data contains 6 flavors at all
-        self.assertEqual(6, len(resources.__flavors__))
+        # test data contains 9 flavors at all
+        self.assertEqual(9, len(resources.__flavors__))
 
 
     def test_get_flavors(self,mock): #pylint: disable=invalid-name
@@ -65,12 +65,12 @@ class TestResource(unittest.TestCase): # pylint: disable=missing-class-docstring
         self.assertEqual(1,denbi_2V100_large.available)
         self.assertEqual(2,denbi_2V100_large.total)
         windows_standard = resources.get_flavor("234eac45-ae04-4e01-8a49-b81ee8063863")
-        self.assertEqual(12,windows_standard.available)
-        self.assertEqual(12,windows_standard.total)
+        self.assertEqual(18,windows_standard.available)
+        self.assertEqual(24,windows_standard.total)
 
     def test_get_flavors_whitelist_filter(self,mock):
         """Test get_flavors with whitelist filter."""
-    
+
         mock_openstack_connection(mock)
 
         # create new Resources object
