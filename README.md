@@ -150,7 +150,7 @@ To run the server inside a Docker container, please execute the following from t
 docker build -t denbi/openstackflavorexporter .
 
 # start up a container in the host network
-docker run --env-file ./env.file denbi/app_credentials
+docker run --env-file ./env.file denbi/openstackflavorexporter
 ```
 
 where `env.file` contains the Openstack environment :
