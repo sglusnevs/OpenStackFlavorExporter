@@ -104,6 +104,41 @@
       }
     }
   },
+  {    
+    "links": [
+      {
+        "rel": "self",
+        "href": "https://denbi.de:8774/v2.1/flavors/777eac45-ae04-4e01-8a49-b81ee8063863"
+      },
+      {
+        "rel": "bookmark",
+        "href": "https://denbi.de:8774/flavors/777eac45-ae04-4e01-8a49-b81ee8063863"
+      }
+    ],
+    "name": "de.NBI highmem xlarge + ephemeral",
+    "description": null,
+    "disk": 200,
+    "is_public": true,
+    "ram": 480000,
+    "vcpus": 28,
+    "swap": 1024,
+    "ephemeral": 5000,
+    "is_disabled": true,
+    "rxtx_factor": 1.0,
+    "extra_specs": {},
+    "id": "777eac45-ae04-4e01-8a49-b81ee8063863",
+    "location": {
+      "cloud": "denbi.de",
+      "region_name": null,
+      "zone": null,
+      "project": {
+        "id": "15c37adda6994f40bfad163a45ef680a",
+        "name": null,
+        "domain_id": null,
+        "domain_name": null
+      }
+    }
+  },
   {
     "links": [
       {
