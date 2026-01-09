@@ -17,7 +17,7 @@ def create_osclient(microversions={'compute':'2.79'}): # pylint: disable=dangero
     """
 
     if os.environ["OS_AUTH_URL"]:
-        # if OS_AUTH_URL is set, prefer envvars        
+        # if OS_AUTH_URL is set, prefer envvars
         connection = openstack.connect(load_yaml_config=False,load_envvars=True)
     elif os.environ["OS_CLOUD"]:
         # if OS_CLOUD is set, prefer clouds.yaml
