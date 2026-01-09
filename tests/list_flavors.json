@@ -38,6 +38,76 @@
     "links": [
       {
         "rel": "self",
+        "href": "https://denbi.de:8774/v2.1/flavors/261dac45-ae04-4e01-8a49-b81ee8063863"
+      },
+      {
+        "rel": "bookmark",
+        "href": "https://denbi.de:8774/flavors/261dac45-ae04-4e01-8a49-b81ee8063863"
+      }
+    ],
+    "name": "de.NBI medium legacy",
+    "description": null,
+    "disk": 20,
+    "is_public": true,
+    "ram": 32768,
+    "vcpus": 14,
+    "swap": 1024,
+    "ephemeral": 0,
+    "is_disabled": false,
+    "rxtx_factor": 1.0,
+    "extra_specs": {},
+    "id": "261dac45-ae04-4e01-8a49-b81ee8063863",
+    "location": {
+      "cloud": "denbi.de",
+      "region_name": null,
+      "zone": null,
+      "project": {
+        "id": "15c37adda6994f40bfad163a45ef680a",
+        "name": null,
+        "domain_id": null,
+        "domain_name": null
+      }
+    }
+  },
+  {
+    "links": [
+      {
+        "rel": "self",
+        "href": "https://denbi.de:8774/v2.1/flavors/234eac45-ae04-4e01-8a49-b81ee8063863"
+      },
+      {
+        "rel": "bookmark",
+        "href": "https://denbi.de:8774/flavors/234eac45-ae04-4e01-8a49-b81ee8063863"
+      }
+    ],
+    "name": "Windows standard",
+    "description": null,
+    "disk": 200,
+    "is_public": true,
+    "ram": 32768,
+    "vcpus": 14,
+    "swap": 1024,
+    "ephemeral": 0,
+    "is_disabled": false,
+    "rxtx_factor": 1.0,
+    "extra_specs": {},
+    "id": "234eac45-ae04-4e01-8a49-b81ee8063863",
+    "location": {
+      "cloud": "denbi.de",
+      "region_name": null,
+      "zone": null,
+      "project": {
+        "id": "15c37adda6994f40bfad163a45ef680a",
+        "name": null,
+        "domain_id": null,
+        "domain_name": null
+      }
+    }
+  },
+  {
+    "links": [
+      {
+        "rel": "self",
         "href": "https://denbi.de:8774/v2.1/flavors/299eeca6-ae00-44c2-99ff-eb7e3455d17f"
       },
       {
@@ -57,6 +127,41 @@
     "rxtx_factor": 1.0,
     "extra_specs": {},
     "id": "299eeca6-ae00-44c2-99ff-eb7e3455d17f",
+    "location": {
+      "cloud": "denbi.de",
+      "region_name": null,
+      "zone": null,
+      "project": {
+        "id": "15c37adda6994f40bfad163a45ef680a",
+        "name": null,
+        "domain_id": null,
+        "domain_name": null
+      }
+    }
+  },
+    {
+    "links": [
+      {
+        "rel": "self",
+        "href": "https://denbi.de:8774/v2.1/flavors/799eeca6-ae00-44c2-99ff-eb7e3455d17f"
+      },
+      {
+        "rel": "bookmark",
+        "href": "https://denbi.de:8774/flavors/799eeca6-ae00-44c2-99ff-eb7e3455d17f"
+      }
+    ],
+    "name": "de.NBI small LEGACY",
+    "description": null,
+    "disk": 20,
+    "is_public": true,
+    "ram": 16384,
+    "vcpus": 8,
+    "swap": 1024,
+    "ephemeral": 0,
+    "is_disabled": false,
+    "rxtx_factor": 1.0,
+    "extra_specs": {},
+    "id": "799eeca6-ae00-44c2-99ff-eb7e3455d17f",
     "location": {
       "cloud": "denbi.de",
       "region_name": null,

@@ -78,8 +78,8 @@ class TestFastAPI(unittest.TestCase): # pylint: disable=missing-class-docstring
 
         list_of_flavors = response.json()
 
-        # list should return 6 flavor elements
-        self.assertEqual(6,len(list_of_flavors))
+        # list should return 9 flavor elements
+        self.assertEqual(9,len(list_of_flavors))
 
         # iterate over all and  ...
         for f in list_of_flavors:

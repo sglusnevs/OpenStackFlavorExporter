@@ -1,5 +1,7 @@
 """ Module contains classes  Resources and ResourcesException."""
+import re
 import sys
+
 import OpenStackFlavorExporter.openstack
 from OpenStackFlavorExporter.model import ExtendedFlavor
 
@@ -9,7 +11,15 @@ class Resources: # pylint: disable=too-many-instance-attributes
     Additional the count of all possible flavor can be calculated.
     """
 
-    def __init__(self, cpu_overprovisioning=4):
+    def __init__(self, cpu_overprovisioning=4, whitelist=[], blacklist=[]): # pylint: disable=dangerous-default-value
+        """
+        Constructor of Resources class.
+
+        :param cpu_overprovisioning: CPU overprovisioning factor, defaults to 4
+        :param whitelist: list of flavor names to be whitelisted, defaults to empty list
+        :param blacklist: list of flavor names to be blacklisted, defaults to empty list
+
+        """
         self.__osclient__ = OpenStackFlavorExporter.openstack.create_osclient()
 
         self.__hypervisors__ = {}
@@ -19,7 +29,9 @@ class Resources: # pylint: disable=too-many-instance-attributes
         self.__map_of_hypervisors__ = {}
         self.__flavors__:list[ExtendedFlavor]  = []
 
-        self.cpu_overprovisioning = cpu_overprovisioning
+        self.__cpu_overprovisioning = cpu_overprovisioning
+        self.__whitelist = whitelist
+        self.__blacklist = blacklist
 
 
     def __getv(self, _map, _key, default=None):
@@ -91,6 +103,18 @@ class Resources: # pylint: disable=too-many-instance-attributes
 
         self.__map_of_aggregates__ = result
 
+    def __filter_flavor_by_name__(self, flavor_name):
+        """
+        Internal helper function to filter flavor names according to whitelist and blacklist.
+        :param flavor_name: name of flavor to be checked
+        :return: True if flavor is allowed, False otherwise
+        """
+        if self.__whitelist and not any(re.match(pattern, flavor_name,re.IGNORECASE) for pattern in self.__whitelist):
+            return False
+        if self.__blacklist and any(re.match(pattern, flavor_name,re.IGNORECASE) for pattern in self.__blacklist):
+            return False
+        return True
+
     def __update_flavors__(self): # pylint: disable=too-many-locals
         """
         Internal helper functions, that calculates available and total number of flavors.
@@ -100,8 +124,8 @@ class Resources: # pylint: disable=too-many-instance-attributes
 
         for flavor in self.__osclient__.list_flavors(): # pylint: disable=too-many-nested-blocks
 
-            # ignore all disabled and flavors with a name containing substring "DEPRECATED"
-            if flavor["is_disabled"] != "false" and flavor["name"].find("DEPRECATED") == -1:
+            # ignore all disabled filters and filter flavors using black / white listing
+            if flavor["is_disabled"] != "false" and self.__filter_flavor_by_name__(flavor["name"]):
                 total = 0
                 available = 0
                 # sum up all local disk space disk and ephemeral are measured in GB, swap in MB
@@ -143,11 +167,11 @@ class Resources: # pylint: disable=too-many-instance-attributes
 
                         # calculate availability of total and current general resources
                         t_vcpu = int(
-                            int(hypervisor["vcpus"]) * self.cpu_overprovisioning / int(flavor["vcpus"]))
+                            int(hypervisor["vcpus"]) * self.__cpu_overprovisioning / int(flavor["vcpus"]))
                         t_mem = int(int(hypervisor["memory"]) / int(flavor["ram"]))
                         t_disk = int(int(hypervisor["disk"] / local_disk))
 
-                        c_vcpu = max(0,int((int(hypervisor["vcpus"]) * self.cpu_overprovisioning - int(
+                        c_vcpu = max(0,int((int(hypervisor["vcpus"]) * self.__cpu_overprovisioning - int(
                             hypervisor["vcpus_used"])) / int(flavor["vcpus"])))
                         c_mem = max(0,int(int(hypervisor["memory_free"]) / int(flavor["ram"])))
                         c_disk = max(0,int(int(hypervisor["disk_available"] / local_disk)))

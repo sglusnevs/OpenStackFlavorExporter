@@ -9,6 +9,12 @@ from OpenStackFlavorExporter.openstack.resources import Resources
 
 # disable MEMCACHE by default
 MEMCACHE = False
+# set CPU overprovisioning to 4 by default
+CPU_OVERPROVISIONING = 4
+# set empty whitelist by default
+FLAVOR_WHITELIST = []
+# set "DEPRECATED" as default blacklist entry
+FLAVOR_BLACKLIST = ["DEPRECATED"]
 
 def configure_memcache(enabled=True, host="127.0.0.1:11211", expire=300, prefix=""):
     """
@@ -26,14 +32,27 @@ def configure_memcache(enabled=True, host="127.0.0.1:11211", expire=300, prefix=
     MEMCACHEDCLIENT = MemCachedClient(MEMCACHEDHOST, serde=serde.pickle_serde)
     MEMCACHEDPREFIX = prefix
 
+def configure(cpu_overprovisioning=4, whitelist=[], blacklist=[]): # pylint: disable=dangerous-default-value
+    """
+    Configure filters for flavors.
+    
+    :param whitelist: list of flavor names to be whitelisted. A name could be regular expression.
+    :param blacklist: list of flavor names to be blacklisted. A name could be regular expression.
+    :return: None
+    """
+    global CPU_OVERPROVISIONING, FLAVOR_WHITELIST, FLAVOR_BLACKLIST  # pylint: disable=global-statement
+    CPU_OVERPROVISIONING = cpu_overprovisioning
+    FLAVOR_WHITELIST = whitelist
+    FLAVOR_BLACKLIST = blacklist
+
 def update_cache():
     """
     Update memcache, if enabled.
     """
     if MEMCACHE:
         timestamp = datetime.now()
-            # calculate available flavors
-        resources = Resources()
+        # calculate available flavors
+        resources = Resources(cpu_overprovisioning=CPU_OVERPROVISIONING, whitelist=FLAVOR_WHITELIST,blacklist=FLAVOR_BLACKLIST)
         resources.update()
         flavors = resources.get_flavors()
         # and cache them using memcache (if enabled)
@@ -59,7 +78,7 @@ def _get_flavors() -> list[ExtendedFlavor]:
 
     if not flavors:
         # calculate available flavors
-        resources = Resources()
+        resources = Resources(cpu_overprovisioning=CPU_OVERPROVISIONING, whitelist=FLAVOR_WHITELIST,blacklist=FLAVOR_BLACKLIST)
         resources.update()
         flavors = resources.get_flavors()
         # and cache them using memcache (if enabled)
