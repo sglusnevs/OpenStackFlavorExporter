@@ -1,0 +1,33 @@
+[project]
+name = "OpenStackFlavorExporter"
+version = "0.1.0"
+description = "This service provides a REST-API to retrieve information about OpenStack flavors (total and available)."
+authors = [ {name = "Jan Krüger", email = "j.krueger@fz-juelich.de"} ]
+maintainers = [ {name = "Jan Krüger", email = "j.krueger@fz-juelich.de"} ]
+readme = "README.md" 
+keywords = ["your", "project", "keywords"] #Optional
+classifiers = [  # Optional, see https://pypi.org/classifiers/
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent"
+]
+requires-python = ">=3.10"
+license.text = "Apache-2.0"
+dependencies = [
+    "fastapi>=0.124",
+    "openstacksdk>=4.8.0",
+    "os-client-config>=2.3.0",
+    "pymemcache>=4.0.0",
+    "uvicorn>=0.38.0",
+    "httpx>=0.27.0"
+]
+
+[project.urls]
+repository = "https://gitlab.ub.uni-bielefeld.de/deNBI/OpenStackFlavorExporter"
+
+[build-system]
+requires = ["setuptools >= 80.0.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["OpenStackFlavorExporter"]

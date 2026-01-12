@@ -1,0 +1,9 @@
+services:
+  openstackflavorexporter:
+    build: .
+    ports:
+      - "8080:8080"
+    env_file: tmp/app-cred-OpenStackFlavorExporter-openrc.sh # replace with path to app credentials
+    command: python3 OpenStackFlavorExporterServer.py --bind 0.0.0.0:8080 --memcachedHost memcached:11211
+  memcached:
+    image: "memcached"

@@ -1,0 +1,59 @@
+[MAIN]
+
+ignore=.venv,build,.tox
+
+[MESSAGES CONTROL]
+
+# Maximum line length
+max-line-length = 130
+
+# Allow the code to be too long
+ignore-long-lines=True
+
+# Disable certain messages.  Adjust these as needed for your project.
+disable=
+    C0114,  # Missing docstring
+    C0116,  # Missing function or method docstring
+    W0612,  # Unused variable
+    R0903,  # Too few public methods in class
+    R0912,  # Too many instance attributes
+    R0915   # Too many statements
+
+
+[REPORTER]
+
+# Output format (e.g., text, html, json).
+output-format=text
+
+[MISCELLANEOUS]
+# Useful to ignore auto-generated files and docstrings
+good-names=
+    i,
+    j,
+    k,
+    x,
+    y,
+    z,
+    _,
+    __init__,
+    __call__,
+    __str__,
+    __repr__,
+    __add__,
+    __sub__,
+    __mul__,
+    __div__,
+    __truediv__,
+    __floordiv__,
+    __mod__,
+    __pow__,
+    __eq__,
+    __ne__,
+    __lt__,
+    __gt__,
+    __le__,
+    __ge__,
+    __len__,
+    __getitem__,
+    __setitem__,
+    __delitem__
