@@ -36,7 +36,7 @@ class TestResource(unittest.TestCase): # pylint: disable=missing-class-docstring
 
         flavors = resources.get_flavors()
 
-        # test data contains 9 flavors, so 9 entries should be returned
+        # test data contains 9 enabled flavors, so 9 entries should be returned
         self.assertEqual(9,len(flavors))
 
         # check expected availibility for each flavor
@@ -74,12 +74,12 @@ class TestResource(unittest.TestCase): # pylint: disable=missing-class-docstring
         mock_openstack_connection(mock)
 
         # create new Resources object
-        resources = OpenStackFlavorExporter.openstack.resources.Resources(whitelist=["^de.NBI"])
+        resources = OpenStackFlavorExporter.openstack.resources.Resources(whitelist=[r"^de.NBI"])
         # and update data
         resources.update()
 
         flavors = resources.get_flavors()
-        # test data contains 8 flavors starting with "denbi", so 8 entries should be returned
+        # test data contains 8 enabled flavors starting with "denbi", so 8 entries should be returned
         self.assertEqual(8,len(flavors))
 
     def test_get_flavors_blacklist_filter(self,mock):
@@ -93,9 +93,22 @@ class TestResource(unittest.TestCase): # pylint: disable=missing-class-docstring
         resources.update()
 
         flavors = resources.get_flavors()
-        # test data contains 7 non legacy flavors and one flavor starting with "windows", so 6 entries should be returned
+        # test data contains 7 non legacy enabled flavors and one flavor starting with "windows", so 6 entries should be returned
         self.assertEqual(6,len(flavors))
 
+    def test_get_flavors_white_and_blacklist_filter(self,mock):
+        """Test get_flavors with white_ and blacklist filter."""
+
+        mock_openstack_connection(mock)
+
+        # create new Resources object
+        resources = OpenStackFlavorExporter.openstack.resources.Resources(whitelist=[r"^de.NBI"],blacklist=[r".*LEGACY",r".*GPU"])
+        # and update data
+        resources.update()
+
+        flavors = resources.get_flavors()
+        # test data contains 8 enabled de.NBI flavor, two of them are legacy and 3 are GPU flavors, so 3 entries should be returned
+        self.assertEqual(7,len(flavors))
 
 if __name__ == "__main__":
     unittest.main()

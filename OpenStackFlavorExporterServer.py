@@ -56,7 +56,18 @@ if __name__ == '__main__':
                         help="Seconds until uvicorn worker timeouts.",
                         type=int,
                         default=300)
-
+    PARSER.add_argument("--overprovisioning",
+                        help="CPU overprovisioning factor.",
+                        type=int,
+                        default=4)
+    PARSER.add_argument("--whitelist",
+                        help="Comma separated list of flavor names to be whitelisted. A name could be regular expression.",
+                        type=str,
+                        default="")
+    PARSER.add_argument("--blacklist",
+                        help="Comma separated list of flavor names to be blacklisted. A name could be regular expression.",
+                        type=str,
+                        default="DEPRECATED")
     ARGS = PARSER.parse_args()
 
     # validate arguments
@@ -71,7 +82,17 @@ if __name__ == '__main__':
                                                   host=MEMCACHEDHOST,
                                                   expire=TIMEOUT,
                                                   prefix=MEMCACHEDPREFIX)
-
+    # configure OpenStackFlavorExporter
+    WHITELIST = ARGS.whitelist.split(",") if ARGS.whitelist != "" else []
+    if WHITELIST:
+        LOG.info("Using flavor whitelist: %s", WHITELIST)
+    BLACKLIST = ARGS.blacklist.split(",") if ARGS.blacklist != "" else []
+    if BLACKLIST:
+        LOG.info("Using flavor blacklist: %s", BLACKLIST)   
+    OpenStackFlavorExporter.main.configure(cpu_overprovisioning=ARGS.overprovisioning,
+                                          whitelist=WHITELIST,
+                                          blacklist=BLACKLIST)  
+    
     # run uvicorn in a separate child process
     if os.fork() == 0:
         # child
