@@ -88,11 +88,11 @@ if __name__ == '__main__':
         LOG.info("Using flavor whitelist: %s", WHITELIST)
     BLACKLIST = ARGS.blacklist.split(",") if ARGS.blacklist != "" else []
     if BLACKLIST:
-        LOG.info("Using flavor blacklist: %s", BLACKLIST)   
+        LOG.info("Using flavor blacklist: %s", BLACKLIST)
     OpenStackFlavorExporter.main.configure(cpu_overprovisioning=ARGS.overprovisioning,
                                           whitelist=WHITELIST,
-                                          blacklist=BLACKLIST)  
-    
+                                          blacklist=BLACKLIST)
+
     # run uvicorn in a separate child process
     if os.fork() == 0:
         # child

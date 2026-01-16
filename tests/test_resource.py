@@ -107,7 +107,7 @@ class TestResource(unittest.TestCase): # pylint: disable=missing-class-docstring
         resources.update()
 
         flavors = resources.get_flavors()
-        # test data contains 8 enabled de.NBI flavor, two of them are legacy and 3 are GPU flavors, so 3 entries should be returned
+        # test data contains 8 enabled de.NBI flavors, two of them are legacy and 3 are GPU flavors, 3 entries should be returned
         self.assertEqual(7,len(flavors))
 
 if __name__ == "__main__":
