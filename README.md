@@ -19,7 +19,6 @@ adopts its API._
 Without special resources (such as GPUs), the Flavor Exporter should run with any reasonably current
 OpenStack implementation (tested with OpenStack Caracal - 2024.1).
 
-
 Provided that GPU-supported flavor or the specified GPUs are taken into account, it needs some
 additional configuration of aggregates and flavors to work properly.
 
