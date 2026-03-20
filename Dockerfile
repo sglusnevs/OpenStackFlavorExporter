@@ -1,5 +1,7 @@
 FROM python:3.14-alpine
 
+RUN apk upgrade --no-cache
+
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
